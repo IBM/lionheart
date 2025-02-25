@@ -1,0 +1,6 @@
+scikit-build
+numpy
+torch
+torchvision
+transformers
+tensorflow

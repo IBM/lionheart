@@ -1,0 +1,15 @@
+checkpoints/
+data/
+tmp/
+results/
+*.pt
+**/.vscode/
+*.csv
+logs/
+__pycache__/
+*-uncased-squad-*
+*.egg-info
+*.json
+*.candidate
+*.out
+*.sh

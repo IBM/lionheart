@@ -1,0 +1,43 @@
+notifications:
+  email: false
+language: python
+sudo: required
+python:
+  - "3.9"
+  - "3.10"
+  - "3.11"
+addons:
+  apt:
+    packages:
+      - ninja-build
+      - pybind11-dev
+env:
+  global:
+    - CUDA_VISIBLE_DEVICES=""
+    - USE_CUDA=0
+    - TORCH_CUDA_ARCH_LIST=""
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt update
+  - sudo apt-get install -y libopenblas-dev
+  - sudo apt install gcc-11
+  - sudo apt install g++-11
+  - export CC=gcc-11
+  - export CXX=g++-11
+install:
+  - PYTHON_EXECUTABLE=~/virtualenv/python$TRAVIS_PYTHON_VERSION/bin/python$TRAVIS_PYTHON_VERSION
+  - $PYTHON_EXECUTABLE -m pip install travis-wait-improved
+  - $PYTHON_EXECUTABLE -m pip install scikit-build
+  - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+  - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pip install 'transformers[torch]'
+  - git clone https://github.com/IBM/aihwkit.git && cd aihwkit
+  - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pip install -r requirements.txt
+  - $PYTHON_EXECUTABLE -m pip install -r requirements-dev.txt
+  - $PYTHON_EXECUTABLE -m pip install -r requirements-examples.txt
+  - VERBOSE=1 $PYTHON_EXECUTABLE setup.py build_ext --inplace -DUSE_CUDA=OFF -DRPU_BLAS=OpenBLAS
+  - cd ..
+  - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pip install -r requirements.txt
+  - VERBOSE=1 $PYTHON_EXECUTABLE -m pip install -v -e .
+script:
+  - export PYTHONPATH=/home/travis/build/Corey-Lammie/LionHeart/aihwkit/src
+  - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pytest tests/ -s
