@@ -40,5 +40,5 @@ install:
   - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pip install -r requirements.txt
   - VERBOSE=1 $PYTHON_EXECUTABLE -m pip install -v -e .
 script:
-  - export PYTHONPATH=/home/travis/build/IBM/LionHeart/aihwkit/src
+  - export PYTHONPATH=/home/travis/build/IBM/lionheart/aihwkit/src
   - travis-wait-improved --timeout 60m $PYTHON_EXECUTABLE -m pytest tests/ -s
