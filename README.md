@@ -37,15 +37,14 @@ addlicense . -l apache
 ## Citation
 If you use LionHeart in  your research, please cite our paper using the following BibTeX entry:
 ```
-@misc{Lammie2024,
-      title={{LionHeart: A Layer-based Mapping Framework for Heterogeneous Systems with Analog In-Memory Computing Tiles}}, 
-      author={Corey Lammie and Flavio Ponzina and Yuxuan Wang and Joshua Klein and Hadjer Benmeziane and Marina Zapater and Irem Boybat and Abu Sebastian and Giovanni Ansaloni and David Atienza},
-      year={2024},
-      eprint={2401.09420},
-      archivePrefix={arXiv},
-      primaryClass={cs.ET},
-      url={https://arxiv.org/abs/2401.09420},
-      note={To appear in the IEEE Transactions on Emerging Topics in Computing}
+@ARTICLE{Lammie2025,
+  author={Lammie, Corey and Wang, Yuxuan and Ponzina, Flavio and Klein, Joshua and Benmeziane, Hadjer and Zapater, Marina and Boybat, Irem and Sebastian, Abu and Ansaloni, Giovanni and Atienza, David},
+  journal={IEEE Transactions on Emerging Topics in Computing}, 
+  title={LIONHEART: A Layer-Based Mapping Framework for Heterogeneous Systems with Analog in-Memory Computing Tiles}, 
+  year={2025},
+  volume={},
+  number={},
+  doi={10.1109/TETC.2025.3546128}
 }
 ```
 
