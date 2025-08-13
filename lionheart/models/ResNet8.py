@@ -62,6 +62,6 @@ class ResNet8(Model):
 
     def forward(self, x):
         out = self.conv(x)
-        out = out.view(-1, out.shape[1] * out.shape[2] * out.shape[3])
+        out = out.reshape(-1, out.shape[1] * out.shape[2] * out.shape[3])
         out = self.fc(out)
         return out

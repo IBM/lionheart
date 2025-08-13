@@ -21,12 +21,12 @@ class Model(ABC, nn.Module):
     def forward(self):
         pass
 
-    def convert_layers_to_analog(self, ind_analog_layers: list[int]):
+    def convert_layers_to_analog(self, ind_analog_layers: list[int] | int = []):
         self.convert_layers_to_digital()
         self.replacement_layers = []
         ind = 0
         for i, (name, module) in enumerate(self.named_modules()):
-            analog = False
+            analog = True
             if ind_analog_layers is not None:
                 analog = ind in ind_analog_layers
 

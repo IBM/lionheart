@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import aihwkit
-from aihwkit.nn import AnalogConv2d
+from aihwkit.nn import AnalogConv2dMapped
 from .gen_rpu_config import gen_rpu_config
 
 class Conv2d(nn.Module):
@@ -36,7 +36,7 @@ class Conv2d(nn.Module):
         self.analog = analog
         self.rpu_config = gen_rpu_config() if rpu_config is None else rpu_config
         if self.analog:
-            convolution = AnalogConv2d(
+            convolution = AnalogConv2dMapped(
                 in_channels,
                 out_channels,
                 kernel_size=k_size,

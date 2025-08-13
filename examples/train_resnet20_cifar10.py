@@ -31,6 +31,6 @@ for epoch in range(epochs):
     )
     logging.info("Epoch: %d,\tScore: %2.2f" % (epoch, score))
     if score > best_score:
-        te.save_checkpoint(checkpoint_path="resnet.pt")
+        te.save_checkpoint(checkpoint_path="resnet20_cifar10.pt")
         logging.info("New best score: %2.2f" % (score))
         best_score = score

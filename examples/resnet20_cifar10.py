@@ -6,7 +6,7 @@ from lionheart.methods.LH import LH, LHConfig
 if __name__ == "__main__":
     config = LHConfig(
         trainer_evaluator=ResNet20CIFAR10(),
-        checkpoint_path='resnet.pt',
+        checkpoint_path='resnet20_cifar10.pt',
         train_batch_size=128,
         eval_batch_size=256,
         digital_lr=1e-2,
