@@ -42,7 +42,7 @@ class TrainerEvaluator(ABC):
 
     def load_checkpoint(self, checkpoint_path: str, ind_analog_layers: list[int] = None):
         if os.path.exists(checkpoint_path):
-            checkpoint = torch.load(checkpoint_path)
+            checkpoint = torch.load(checkpoint_path, weights_only=False)
             try:
                 if checkpoint["optimizer"] is not None:
                     self.optimizer.load_state_dict(checkpoint["optimizer"])
