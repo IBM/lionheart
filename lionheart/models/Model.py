@@ -26,7 +26,10 @@ class Model(ABC, nn.Module):
         self.replacement_layers = []
         ind = 0
         for i, (name, module) in enumerate(self.named_modules()):
-            analog = ind in ind_analog_layers
+            analog = False
+            if ind_analog_layers is not None:
+                analog = ind in ind_analog_layers
+
             convert = False
             try:
                 if isinstance(rgetattr(self, ".".join(name.split(".")[0:-1])), (Linear, Conv2d)):

@@ -4,6 +4,7 @@ from aihwkit.optim import AnalogSGD
 from .TrainerEvaluator import TrainerEvaluator
 from lionheart.models.Model import Model
 from lionheart.models.ResNet20 import ResNet20
+from lionheart.models.ResNet8 import ResNet8
 from lionheart.datasets import CIFAR10
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -86,3 +87,7 @@ class ResNet20CIFAR10(TrainerEvaluator):
         score = 100.0 * correct / total
         logging.info("Score: %2.2f" % score)
         return score
+    
+class ResNet8CIFAR10(ResNet20CIFAR10):
+    def instantiate_model(self):
+        return ResNet8(num_classes=10).to(device)
