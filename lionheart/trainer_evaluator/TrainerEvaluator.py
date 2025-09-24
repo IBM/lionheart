@@ -75,11 +75,11 @@ class TrainerEvaluator(ABC):
         pass
 
     @abstractmethod
-    def instantiate_optimizer(self, digital_lr: float, digital_momentum: float, analog_lr: float, analog_momentum: float) -> torch.optim.Optimizer:
+    def instantiate_optimizer(self, digital_lr: float, analog_lr: float) -> torch.optim.Optimizer:
         pass
 
-    def set_optimizer(self, digital_lr: float, digital_momentum: float, analog_lr: float, analog_momentum: float):
-        self.optimizer = self.instantiate_optimizer(digital_lr=digital_lr, digital_momentum=digital_momentum, analog_lr=analog_lr, analog_momentum=analog_momentum)
+    def set_optimizer(self, digital_lr: float, analog_lr: float):
+        self.optimizer = self.instantiate_optimizer(digital_lr=digital_lr, analog_lr=analog_lr)
     
     @abstractmethod
     def instantiate_scheduler(self) -> torch.optim.lr_scheduler.LRScheduler:

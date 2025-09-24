@@ -1,6 +1,6 @@
 import logging
 import torch
-from aihwkit.optim import AnalogSGD
+from aihwkit.optim import AnalogAdam
 from .TrainerEvaluator import TrainerEvaluator
 from lionheart.models.Model import Model
 from lionheart.models.ResNet20 import ResNet20
@@ -16,19 +16,17 @@ class ResNet20CIFAR10(TrainerEvaluator):
     def instantiate_dataset(self):
         return CIFAR10()
 
-    def instantiate_optimizer(self, digital_lr: float, digital_momentum: float, analog_lr: float, analog_momentum: float):
+    def instantiate_optimizer(self, digital_lr: float, analog_lr: float):
         digital_parameters, analog_parameters = self.digital_analog_parameters(self.model)
-        return AnalogSGD(
+        return AnalogAdam(
             [
                 {
                     "params": analog_parameters,
                     "lr": analog_lr,
-                    "momentum": analog_momentum,
                 },
                 {
                     "params": digital_parameters,
                     "lr": digital_lr,
-                    "momentum": digital_momentum,
                 },
             ],
         )
@@ -36,7 +34,7 @@ class ResNet20CIFAR10(TrainerEvaluator):
     def instantiate_scheduler(self):
         assert self.model is not None
         assert self.optimizer is not None
-        return torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=200)
+        return torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=100)
     
     def train(self, num_steps: int, batch_size: int, num_workers: int, logging_freq: int = 50):
         assert self.model is not None
