@@ -11,16 +11,18 @@ from transformers.data.processors.squad import SquadResult
 from .TrainerEvaluator import TrainerEvaluator
 from lionheart.models import Model, MobileBERT
 from lionheart.datasets import Squad
+from lionheart.huggingface import MOBILEBERT_SQUAD_MODEL_ID, MOBILEBERT_SQUAD_REVISION
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model_id = "csarron/mobilebert-uncased-squad-v1"
+model_id = MOBILEBERT_SQUAD_MODEL_ID
+model_revision = MOBILEBERT_SQUAD_REVISION
 
 class MobileBERTSquad(TrainerEvaluator):
     def instantiate_model(self):
-        return MobileBERT(model_id=model_id).to(device)
+        return MobileBERT(model_id=model_id, model_revision=model_revision).to(device)
 
     def instantiate_dataset(self):
-        return Squad(model_id=model_id, max_seq_len=320)
+        return Squad(model_id=model_id, model_revision=model_revision, max_seq_len=320)
 
     def instantiate_optimizer(self, digital_lr: float, digital_momentum: float, analog_lr: float, analog_momentum: float):
         digital_parameters, analog_parameters = self.digital_analog_parameters(self.model)

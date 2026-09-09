@@ -7,6 +7,8 @@ from lionheart.datasets.Dataset import Dataset
 from lionheart.models.Model import Model
 
 class TrainerEvaluator(ABC):
+    CHECKPOINT_FORMAT_VERSION = 2
+
     def __init__(self):
         self.dataset = self.instantiate_dataset()
         self.model = None
@@ -31,9 +33,10 @@ class TrainerEvaluator(ABC):
         self.model.convert_layers_to_digital()
         torch.save(
             {
+                "checkpoint_format_version": self.CHECKPOINT_FORMAT_VERSION,
                 "state_dict": self.model.state_dict(),
                 "optimizer": self.optimizer.state_dict() if self.optimizer is not None else None,
-                "scheduler": self.scheduler, 
+                "scheduler": self.scheduler.state_dict() if self.scheduler is not None else None,
                 "ind_analog_layers": ind_analog_layers,
             },
             checkpoint_path
@@ -42,16 +45,32 @@ class TrainerEvaluator(ABC):
 
     def load_checkpoint(self, checkpoint_path: str, ind_analog_layers: list[int] = None):
         if os.path.exists(checkpoint_path):
-            checkpoint = torch.load(checkpoint_path)
             try:
-                if checkpoint["optimizer"] is not None:
+                checkpoint = torch.load(checkpoint_path, weights_only=True)
+            except Exception as exc:
+                raise ValueError(
+                    "Unsupported checkpoint format. Regenerate the checkpoint with "
+                    "the current LionHeart version to use safe loading."
+                ) from exc
+
+            if self.model is None:
+                self.set_model()
+            self.model.load_state_dict(checkpoint["state_dict"])
+
+            try:
+                if checkpoint["optimizer"] is not None and self.optimizer is not None:
                     self.optimizer.load_state_dict(checkpoint["optimizer"])
-            except:
+            except ValueError:
                 logging.warning("failed to load optimizer.")
 
-            self.scheduler = checkpoint["scheduler"]
-            self.set_model()
-            self.model.load_state_dict(checkpoint["state_dict"])
+            if checkpoint["scheduler"] is not None:
+                try:
+                    if self.scheduler is None:
+                        self.set_scheduler()
+                    self.scheduler.load_state_dict(checkpoint["scheduler"])
+                except (AssertionError, AttributeError, ValueError):
+                    logging.warning("failed to load scheduler.")
+
             self.model.convert_layers_to_analog(checkpoint['ind_analog_layers'] if ind_analog_layers is None else ind_analog_layers)
             return checkpoint['ind_analog_layers'] if ind_analog_layers is None else ind_analog_layers
         else:
