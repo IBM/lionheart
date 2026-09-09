@@ -4,6 +4,7 @@ from transformers import MobileBertForQuestionAnswering, MobileBertTokenizer
 from aihwkit.nn import AnalogLinear
 from aihwkit.inference.utils import drift_analog_weights as aihwkit_drift_analog_weights
 import lionheart
+from lionheart.huggingface import MOBILEBERT_SQUAD_MODEL_ID, MOBILEBERT_SQUAD_REVISION
 from .common.Linear import Linear
 from .Model import Model
 
@@ -11,10 +12,20 @@ from .Model import Model
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class MobileBERT(Model):
-    def __init__(self, model_id: str = "csarron/mobilebert-uncased-squad-v1"):
+    def __init__(
+        self,
+        model_id: str = MOBILEBERT_SQUAD_MODEL_ID,
+        model_revision: str = MOBILEBERT_SQUAD_REVISION,
+    ):
         super(MobileBERT, self).__init__()
-        self.model = MobileBertForQuestionAnswering.from_pretrained(model_id)
-        self.tokenizer = MobileBertTokenizer.from_pretrained(model_id)
+        self.model = MobileBertForQuestionAnswering.from_pretrained(
+            model_id,
+            revision=model_revision,
+        )
+        self.tokenizer = MobileBertTokenizer.from_pretrained(
+            model_id,
+            revision=model_revision,
+        )
 
     def forward(self, **kwargs):
         return self.model(**kwargs)
