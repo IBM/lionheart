@@ -213,7 +213,8 @@ class Squad(Dataset):
         shuffle: bool,
         num_workers: int,
     ):
-        assert shuffle == False
+        if shuffle:
+            raise ValueError("SQuAD test data must be loaded without shuffling")
         dataset, _, _ = self.load_and_cache_examples(
             num_workers=num_workers, evaluate=True, output_examples=True,
         )

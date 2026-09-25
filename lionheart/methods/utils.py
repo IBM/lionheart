@@ -69,7 +69,7 @@ def rsetattr(obj, attr, val):
             elif all(i.isdigit() for i in attr):
                 try:
                     subobj[int(attr)] = val
-                except:
+                except (IndexError, TypeError):
                     subobj = list(obj)
                     subobj[int(attr)] = val
                 if pre_hist != []:

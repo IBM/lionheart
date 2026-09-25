@@ -17,11 +17,12 @@ class CIFAR10(Dataset):
         num_workers: int,
         validation: bool,
     ) -> DataLoader:
-        if not validation:
-            assert self.valid_indices is None
+        if not validation and self.valid_indices is not None:
+            raise ValueError("valid_indices can only be provided for validation")
 
         if self.train_indices is not None or self.valid_indices is not None:
-            assert self.train_indices is not None and self.valid_indices is not None
+            if self.train_indices is None or self.valid_indices is None:
+                raise ValueError("train_indices and valid_indices must be provided together")
 
         transform = transforms.Compose(
             [
