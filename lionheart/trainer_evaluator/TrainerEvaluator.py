@@ -29,7 +29,8 @@ class TrainerEvaluator(ABC):
         return digital_parameters, analog_parameters
         
     def save_checkpoint(self, checkpoint_path: str, ind_analog_layers: list[int] = None):
-        assert self.model is not None
+        if self.model is None:
+            raise RuntimeError("model must be initialized before saving a checkpoint")
         self.model.convert_layers_to_digital()
         torch.save(
             {

@@ -33,13 +33,17 @@ class ResNet20CIFAR10(TrainerEvaluator):
         )
 
     def instantiate_scheduler(self):
-        assert self.model is not None
-        assert self.optimizer is not None
+        if self.model is None:
+            raise RuntimeError("model must be initialized before the scheduler")
+        if self.optimizer is None:
+            raise RuntimeError("optimizer must be initialized before the scheduler")
         return torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=200)
     
     def train(self, num_steps: int, batch_size: int, num_workers: int, logging_freq: int = 50):
-        assert self.model is not None
-        assert self.optimizer is not None
+        if self.model is None:
+            raise RuntimeError("model must be initialized before training")
+        if self.optimizer is None:
+            raise RuntimeError("optimizer must be initialized before training")
         train_dataloader = self.dataset.load_train_data(batch_size=batch_size, num_workers=num_workers, validation=False)
         self.model.train().to(device)
         criterion = torch.nn.CrossEntropyLoss()
@@ -70,7 +74,8 @@ class ResNet20CIFAR10(TrainerEvaluator):
                 current_step += 1
 
     def evaluate(self, batch_size: int, num_workers: int):
-        assert self.model is not None
+        if self.model is None:
+            raise RuntimeError("model must be initialized before evaluation")
         test_dataloader = self.dataset.load_train_data(batch_size=batch_size, num_workers=num_workers, validation=True)
         self.model.eval().to(device)
         correct = 0

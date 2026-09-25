@@ -60,7 +60,8 @@ class LH():
             return -1
         
     def det_analog_digital_mac_ratio(self, checkpoint_path: str, ind_analog_layers: list[int]):
-        assert checkpoint_path is not None
+        if checkpoint_path is None:
+            raise ValueError("checkpoint_path must be provided")
         self.config.trainer_evaluator.set_model()
         self.config.trainer_evaluator.load_checkpoint(self.config.checkpoint_path, ind_analog_layers=ind_analog_layers)
         self.config.trainer_evaluator.model.convert_layers_to_analog(ind_analog_layers)

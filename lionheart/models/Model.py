@@ -31,7 +31,7 @@ class Model(ABC, nn.Module):
             try:
                 if isinstance(rgetattr(self, ".".join(name.split(".")[0:-1])), (Linear, Conv2d)):
                     continue
-            except:
+            except AttributeError:
                 pass
 
             if isinstance(module, nn.Linear):
@@ -95,7 +95,7 @@ class Model(ABC, nn.Module):
             try:
                 if isinstance(rgetattr(self, ".".join(name.split(".")[0:-1])), (Linear, Conv2d)):
                     continue
-            except:
+            except AttributeError:
                 pass
 
             if isinstance(module, Linear) or isinstance(module, Conv2d):
